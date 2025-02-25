@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/patyiszabolcs/Projects/projektmunka/projektmunka/projektmunka.csproj",
+      "projectUniqueName": "/Users/patyiszabolcs/GitHub/projektmunka/projektmunka/projektmunka.csproj",
       "projectName": "projektmunka",
-      "projectPath": "/Users/patyiszabolcs/Projects/projektmunka/projektmunka/projektmunka.csproj",
+      "projectPath": "/Users/patyiszabolcs/GitHub/projektmunka/projektmunka/projektmunka.csproj",
       "packagesPath": "/Users/patyiszabolcs/.nuget/packages/",
-      "outputPath": "/Users/patyiszabolcs/Projects/projektmunka/projektmunka/obj/",
+      "outputPath": "/Users/patyiszabolcs/GitHub/projektmunka/projektmunka/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/patyiszabolcs/.nuget/NuGet/NuGet.Config"
