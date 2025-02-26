@@ -1,72 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Text;
 
 class Program
 {
-    class Message
+    class Uzenet
     {
-        public DateTime ido { get; set; }
-        public string uzenet { get; set; }
-        public string kuldoIP { get; set; }
-        public string fogadoIP { get; set; }
+        public DateTime Ido { get; set; }
+        public string Szoveg { get; set; }
+        public string KuldoIP { get; set; }
+        public string FogadoIP { get; set; }
     }
 
     static void Main()
     {
-        string filePath = "adatforgalom.txt"; // A fájl elérési útja
-        List<Message> messages = ReadMessagesFromFile(filePath);
+        string fajl = File.ReadAllText("adatforgalom.txt", Encoding.UTF8); // A fájl elérési útja
+        List<Uzenet> uzenetek = new List<Uzenet>();
+        string[] formazatlanUzenetek = fajl.Split(".-.+.", StringSplitOptions.RemoveEmptyEntries);
+        
+        foreach (string formazatlanUzenet in formazatlanUzenetek)
+        {
+            string[] darabok = formazatlanUzenet.Split(".x.", StringSplitOptions.RemoveEmptyEntries);
+            if (darabok.Length < 4) continue;
+
+            DateTime ido = DateTime.Parse(darabok[0].Trim());
+            string szoveg = darabok[1].Trim();
+            string kuldoIP = IPCimAtvaltas(darabok[2].Trim());
+            string fogadoIP = IPCimAtvaltas(darabok[3].Trim());
+            
+            uzenetek.Add(new Uzenet { Ido = ido, Szoveg = szoveg, KuldoIP = kuldoIP, FogadoIP = fogadoIP });
+        }
         
         Console.Write("Adj meg egy IP-címet (pl. 192.168.0.231): ");
-        string inputIP = Console.ReadLine();
-        DisplayCommunicationForIP(messages, inputIP);
+        string ipcimBekeres = Console.ReadLine();
+        IPCimKereses(uzenetek, ipcimBekeres);
     }
 
-    static List<Message> ReadMessagesFromFile(string filePath)
+    static string IPCimAtvaltas(string eredetiIpcim)
     {
-        List<Message> messages = new List<Message>();
-        string content = File.ReadAllText(filePath);
-        string[] rawMessages = content.Split(".-.+.", StringSplitOptions.RemoveEmptyEntries);
-        
-        foreach (string rawMessage in rawMessages)
-        {
-            string[] parts = rawMessage.Split(".x.", StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length < 4) continue;
-
-            DateTime timestamp = DateTime.Parse(parts[0].Trim());
-            string text = parts[1].Trim();
-            string senderIP = ConvertBinaryToIP(parts[2].Trim());
-            string receiverIP = ConvertBinaryToIP(parts[3].Trim());
-            
-            messages.Add(new Message { ido = timestamp, uzenet = text, kuldoIP = senderIP, fogadoIP = receiverIP });
-        }
-        return messages;
-    }
-
-    static string ConvertBinaryToIP(string binaryIP)
-    {
-        string[] octets = new string[4];
+        string[] oktettek = new string[4];
         for (int i = 0; i < 4; i++)
         {
-            octets[i] = Convert.ToInt32(binaryIP.Substring(i * 8, 8), 2).ToString();
+            oktettek[i] = Convert.ToInt32(eredetiIpcim.Substring(i * 8, 8), 2).ToString();
         }
-        return string.Join(".", octets);
+        return string.Join(".", oktettek);
     }
 
-    static void DisplayCommunicationForIP(List<Message> messages, string ipAddress)
+    static void IPCimKereses(List<Uzenet> uzenetek, string ipcim)
     {
-        var relatedMessages = messages.Where(m => m.kuldoIP == ipAddress || m.fogadoIP == ipAddress).OrderBy(m => m.ido).ToList();
-        if (relatedMessages.Count == 0)
+        List<Uzenet> talalatok = new List<Uzenet>();
+        foreach (var uzenet in uzenetek)
+        {
+            if (uzenet.KuldoIP == ipcim || uzenet.FogadoIP == ipcim)
+            {
+                talalatok.Add(uzenet);
+            }
+        }
+
+        talalatok.Sort((m1, m2) => m1.Ido.CompareTo(m2.Ido));
+
+        if (talalatok.Count == 0)
         {
             Console.WriteLine("Nincs találat az adott IP-címre.");
             return;
         }
 
-        Console.WriteLine($"Kommunikációs adatok az IP-címhez: {ipAddress}\n");
-        foreach (var msg in relatedMessages)
+        Console.WriteLine($"Kommunikációs adatok az IP-címhez: {ipcim}\n");
+        foreach (var uzenet in talalatok)
         {
-            Console.WriteLine($"[{msg.ido}] {msg.kuldoIP} -> {msg.fogadoIP}: {msg.uzenet}");
+            Console.WriteLine($"[{uzenet.Ido}] {uzenet.KuldoIP} -> {uzenet.FogadoIP}: {uzenet.Szoveg}");
         }
     }
 }
