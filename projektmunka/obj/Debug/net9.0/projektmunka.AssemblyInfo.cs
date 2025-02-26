@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("projektmunka")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0b242eed632e535431ccf916058aff44288a2669")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d7c54b383cc452f42d593526d8ededfee5ffef38")]
 [assembly: System.Reflection.AssemblyProductAttribute("projektmunka")]
 [assembly: System.Reflection.AssemblyTitleAttribute("projektmunka")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
