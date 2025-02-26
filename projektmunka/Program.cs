@@ -37,7 +37,7 @@ class Program
         IPCimKereses(uzenetek, ipcimBekeres);
     }
 
-    static string IPCimAtvaltas(string eredetiIpcim)
+    public static string IPCimAtvaltas(string eredetiIpcim)
     {
         string[] oktettek = new string[4];
         for (int i = 0; i < 4; i++)
